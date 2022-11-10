@@ -5,6 +5,8 @@ const { uploadGallery } = require('../middlewares/multer.middleware');
 
 const router = express.Router();
 
+router.get('/', GalleryController.index);
 router.post('/', uploadGallery, uploadGalleryValidation, GalleryController.store);
+router.get('/:slug', GalleryController.show);
 
 module.exports = router;

@@ -21,7 +21,7 @@ module.exports = {
                 .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
                 .label('Slug')
                 .external(async (slug) => await isSlugExistsJoi(slug))
-                .options({ messages: { 'string.pattern.base': 'Slug must be lowercase and separated by hyphens' } }),
+                .options({ messages: { 'string.pattern.base': 'Slug must be separated by hyphens' } }),
             photo: Joi.any(),
         });
 
