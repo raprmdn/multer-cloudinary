@@ -1,7 +1,7 @@
 const { Gallery } = require('../models');
 const { StatusCodes: status } = require('http-status-codes');
 const { apiResponse } = require('../utils/apiResponse.utils');
-const { cloudinaryStorage } = require('../config/cloudinary.config');
+const { cloudinaryStorage, cloudinaryDestroy} = require('../config/cloudinary.config');
 
 module.exports = {
     index: async () => {
@@ -29,9 +29,24 @@ module.exports = {
             const result = await cloudinaryStorage(req.file.path);
             const gallery = await Gallery.create({ title, slug, image: result.secure_url });
 
-            return apiResponse(status.OK, 'success', 'Success upload an image', { gallery });
+            return apiResponse(status.OK, 'success', 'Success upload gallery', { gallery });
         } catch (e) {
             throw apiResponse(e.code || status.INTERNAL_SERVER_ERROR, e.status || 'INTERNAL_SERVER_ERROR', e.message);
         }
-    }
+    },
+    destroy: async (req) => {
+        try {
+            const { slug } = req.params;
+            const gallery = await Gallery.findOne({ where: { slug } });
+            if (!gallery) throw { code: status.NOT_FOUND, status: 'NOT_FOUND', message: 'Gallery not found' };
+
+            const publicId = gallery.image.split('/').pop().split('.')[0];
+            await cloudinaryDestroy(`learn-upload-cloudinary/${publicId}`);
+            await gallery.destroy();
+
+            return apiResponse(status.OK, 'success', 'Success delete gallery');
+        } catch (e) {
+            throw apiResponse(e.code || status.INTERNAL_SERVER_ERROR, e.status || 'INTERNAL_SERVER_ERROR', e.message);
+        }
+    },
 };

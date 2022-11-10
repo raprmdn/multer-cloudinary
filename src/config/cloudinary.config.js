@@ -14,5 +14,8 @@ module.exports = {
             resource_type: 'auto',
             folder: 'learn-upload-cloudinary',
         });
+    },
+    cloudinaryDestroy: async (publicId) => {
+        return await cloudinary.uploader.destroy(publicId);
     }
 };

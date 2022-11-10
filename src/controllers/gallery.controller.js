@@ -24,5 +24,13 @@ module.exports = {
         } catch (e) {
             return res.status(e.code).json(e);
         }
+    },
+    destroy: async (req, res) => {
+        try {
+            const serviceResponse = await GalleryService.destroy(req);
+            return res.status(serviceResponse.code).json(serviceResponse);
+        } catch (e) {
+            return res.status(e.code).json(e);
+        }
     }
 };

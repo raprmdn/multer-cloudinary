@@ -8,5 +8,6 @@ const router = express.Router();
 router.get('/', GalleryController.index);
 router.post('/', uploadGallery, uploadGalleryValidation, GalleryController.store);
 router.get('/:slug', GalleryController.show);
+router.delete('/:slug', GalleryController.destroy);
 
 module.exports = router;
